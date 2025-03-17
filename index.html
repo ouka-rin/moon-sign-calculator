@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>☆月星座計算ツール☆</title>
+    <title>月星座計算ツール</title>
     <script>
         function calculateMoonSign() {
             let year = document.getElementById("year").value;
@@ -11,14 +11,15 @@
             let day = document.getElementById("day").value;
             let hour = document.getElementById("hour").value;
             let minute = document.getElementById("minute").value;
+            let place = document.getElementById("place").value;
             
-            if (!year || !month || !day || !hour || !minute) {
+            if (!year || !month || !day || !hour || !minute || !place) {
                 document.getElementById("result").innerText = "すべての項目を入力してください。";
                 return;
             }
             
             let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
-            let moonSign = getCorrectMoonSign(birthDate);
+            let moonSign = getCorrectMoonSign(birthDate, place);
             
             if (!moonSign) {
                 document.getElementById("result").innerText = "エラーが発生しました。もう一度お試しください。";
@@ -27,21 +28,32 @@
             }
         }
 
-        function getCorrectMoonSign(date) {
+        function getCorrectMoonSign(date, place) {
             const zodiacSigns = [
                 "牡羊座", "牡牛座", "双子座", "蟹座", "獅子座", "乙女座",
                 "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
             ];
             
-            // 月の軌道周期（NASAデータ基準）
+            const placeOffsets = {
+                "1": 9, "2": 9, "3": 9, "4": 9, "5": 9, "6": 9, "7": 9, "8": 9, "9": 9, "10": 9,
+                "11": 9, "12": 9, "13": 9, "14": 9, "15": 9, "16": 9, "17": 9, "18": 9, "19": 9,
+                "20": 9, "21": 9, "22": 9, "23": 9, "24": 9, "25": 9, "26": 9, "27": 9, "28": 9,
+                "29": 9, "30": 9, "31": 9, "32": 9, "33": 9, "34": 9, "35": 9, "36": 9, "37": 9,
+                "38": 9, "39": 9, "40": 9, "41": 9, "42": 9, "43": 9, "44": 9, "45": 9, "46": 9,
+                "47": 9
+            };
+            
+            let timezoneOffset = placeOffsets[place] || 9;
+            date.setHours(date.getHours() + timezoneOffset);
+            
             let referenceDate = new Date("2000-01-06T00:00:00Z");
-            let lunarCycle = 27.321661; // 月の公転周期
+            let lunarCycle = 27.321661;
             let daysSinceReference = (date - referenceDate) / (1000 * 60 * 60 * 24);
-            let moonPosition = (daysSinceReference % lunarCycle) / lunarCycle * 360; // 度数に変換
+            let moonPosition = (daysSinceReference % lunarCycle) / lunarCycle * 360;
             
-            let signIndex = Math.floor((moonPosition / 30) % 12); // 0～11の範囲に収める
+            let signIndex = Math.floor((moonPosition / 30) % 12);
             
-            return zodiacSigns[signIndex >= 0 ? signIndex : 0]; // 安全策として負の値を防ぐ
+            return zodiacSigns[signIndex >= 0 ? signIndex : 0];
         }
     </script>
 </head>
@@ -54,9 +66,59 @@
     <label>出生時間：</label>
     <input type="number" id="hour" placeholder="時" min="0" max="23">時
     <input type="number" id="minute" placeholder="分" min="0" max="59">分<br><br>
+    <label>出生地：</label>
+    <select id="place">
+        <option value="">-</option>
+        <option value="1">北海道</option>
+        <option value="2">青森県</option>
+        <option value="3">岩手県</option>
+        <option value="4">宮城県</option>
+        <option value="5">秋田県</option>
+        <option value="6">山形県</option>
+        <option value="7">福島県</option>
+        <option value="8">茨城県</option>
+        <option value="9">栃木県</option>
+        <option value="10">群馬県</option>
+        <option value="11">埼玉県</option>
+        <option value="12">千葉県</option>
+        <option value="13">東京都</option>
+        <option value="14">神奈川県</option>
+        <option value="15">新潟県</option>
+        <option value="16">富山県</option>
+        <option value="17">石川県</option>
+        <option value="18">福井県</option>
+        <option value="19">山梨県</option>
+        <option value="20">長野県</option>
+        <option value="21">岐阜県</option>
+        <option value="22">静岡県</option>
+        <option value="23">愛知県</option>
+        <option value="24">三重県</option>
+        <option value="25">滋賀県</option>
+        <option value="26">京都府</option>
+        <option value="27">大阪府</option>
+        <option value="28">兵庫県</option>
+        <option value="29">奈良県</option>
+        <option value="30">和歌山県</option>
+        <option value="31">鳥取県</option>
+        <option value="32">島根県</option>
+        <option value="33">岡山県</option>
+        <option value="34">広島県</option>
+        <option value="35">山口県</option>
+        <option value="36">徳島県</option>
+        <option value="37">香川県</option>
+        <option value="38">愛媛県</option>
+        <option value="39">高知県</option>
+        <option value="40">福岡県</option>
+        <option value="41">佐賀県</option>
+        <option value="42">長崎県</option>
+        <option value="43">熊本県</option>
+        <option value="44">大分県</option>
+        <option value="45">宮崎県</option>
+        <option value="46">鹿児島県</option>
+        <option value="47">沖縄県</option>
+    </select><br><br>
     <button onclick="calculateMoonSign()">月星座を計算</button>
     <h3 id="result"></h3>
-    
     <br><br>
     <a href="https://note.com/ouka_rin/n/n26a3aa48cbfc" style="display:block; text-align:center; padding:10px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">📖 NOTEに戻る</a>
 </body>
