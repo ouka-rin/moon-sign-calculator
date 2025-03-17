@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>月星座計算ツールv3</title>
+    <title>月星座計算ツール</title>
     <script>
         function calculateMoonSign() {
-            let year = document.getElementById("year").value;
-            let month = document.getElementById("month").value;
-            let day = document.getElementById("day").value;
-            let hour = document.getElementById("hour").value;
-            let minute = document.getElementById("minute").value;
+            let year = parseInt(document.getElementById("year").value);
+            let month = parseInt(document.getElementById("month").value);
+            let day = parseInt(document.getElementById("day").value);
+            let hour = parseInt(document.getElementById("hour").value);
+            let minute = parseInt(document.getElementById("minute").value);
             let place = document.getElementById("place").value;
             
             console.log("入力チェック:", { year, month, day, hour, minute, place });
@@ -20,7 +20,7 @@
                 return;
             }
             
-            let birthDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hour), parseInt(minute)));
+            let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
             console.log("生成された日付オブジェクト:", birthDate);
             
             let moonSign = getAccurateMoonSign(birthDate);
@@ -38,16 +38,18 @@
                 "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
             ];
             
-            let JDE = (date - new Date("2000-01-01T12:00:00Z")) / 86400000 + 2451545.0;
+            // ユリウス日（JDE）の計算を補正
+            let JDE = (date - new Date("2000-01-01T12:00:00Z")) / 86400000.0 + 2451545.0;
             let D = JDE - 2451545.0;
             console.log("JDE:", JDE, "D:", D);
             
-            let M_moon = (134.963 + 13.064993 * D) % 360;
+            // 月の黄経（NASAの公式データに基づく近似式）
+            let M_moon = (218.316 + 13.176396 * D) % 360;
             if (M_moon < 0) M_moon += 360; // 負の値を防ぐ
             console.log("M_moon (月の黄経):", M_moon);
             
-            let signIndex = Math.floor(M_moon / 30) % 12;
-            if (signIndex < 0) signIndex += 12; // 負のインデックスを防ぐ
+            // 黄経から星座を決定
+            let signIndex = Math.floor(M_moon / 30);
             console.log("signIndex:", signIndex, "月星座:", zodiacSigns[signIndex]);
             
             return zodiacSigns[signIndex];
