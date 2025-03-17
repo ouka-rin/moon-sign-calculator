@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>月星座計算ツール</title>
+    <title>月星座計算ツールv2</title>
     <script>
         function calculateMoonSign() {
             let year = parseInt(document.getElementById("year").value);
@@ -19,6 +19,8 @@
             }
             
             let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
+            console.log("入力された日付:", birthDate);
+            
             let moonSign = getAccurateMoonSign(birthDate);
             
             if (!moonSign) {
@@ -34,11 +36,16 @@
                 "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
             ];
             
-            // 月の黄経を計算（NASAの近似式を使用）
+            // Julian Date（ユリウス日）を計算
             let JDE = (date - new Date("2000-01-01T12:00:00Z")) / 86400000 + 2451545.0;
             let D = JDE - 2451545.0;
+            console.log("JDE:", JDE, "D:", D);
+            
             let M_moon = (134.963 + 13.064993 * D) % 360;
-            let signIndex = Math.floor((M_moon / 30) % 12);
+            console.log("M_moon (月の黄経):", M_moon);
+            
+            let signIndex = Math.floor(M_moon / 30) % 12;
+            console.log("signIndex:", signIndex, "月星座:", zodiacSigns[signIndex]);
             
             return zodiacSigns[signIndex >= 0 ? signIndex : 0];
         }
@@ -106,7 +113,5 @@
     </select><br><br>
     <button onclick="calculateMoonSign()">月星座を計算</button>
     <h3 id="result"></h3>
-    <br><br>
-    <a href="https://note.com/ouka_rin/n/n26a3aa48cbfc" style="display:block; text-align:center; padding:10px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">📖 NOTEに戻る</a>
 </body>
 </html>
