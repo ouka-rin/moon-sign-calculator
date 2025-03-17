@@ -6,11 +6,11 @@
     <title>月星座計算ツール</title>
     <script>
         function calculateMoonSign() {
-            let year = document.getElementById("year").value;
-            let month = document.getElementById("month").value;
-            let day = document.getElementById("day").value;
-            let hour = document.getElementById("hour").value;
-            let minute = document.getElementById("minute").value;
+            let year = parseInt(document.getElementById("year").value);
+            let month = parseInt(document.getElementById("month").value);
+            let day = parseInt(document.getElementById("day").value);
+            let hour = parseInt(document.getElementById("hour").value);
+            let minute = parseInt(document.getElementById("minute").value);
             let place = document.getElementById("place").value;
             
             if (!year || !month || !day || !hour || !minute || !place) {
@@ -19,7 +19,7 @@
             }
             
             let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
-            let moonSign = getCorrectMoonSign(birthDate, place);
+            let moonSign = getAccurateMoonSign(birthDate);
             
             if (!moonSign) {
                 document.getElementById("result").innerText = "エラーが発生しました。もう一度お試しください。";
@@ -28,31 +28,19 @@
             }
         }
 
-        function getCorrectMoonSign(date, place) {
+        function getAccurateMoonSign(date) {
             const zodiacSigns = [
                 "牡羊座", "牡牛座", "双子座", "蟹座", "獅子座", "乙女座",
                 "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
             ];
             
-            const placeOffsets = {
-                "1": 9, "2": 9, "3": 9, "4": 9, "5": 9, "6": 9, "7": 9, "8": 9, "9": 9, "10": 9,
-                "11": 9, "12": 9, "13": 9, "14": 9, "15": 9, "16": 9, "17": 9, "18": 9, "19": 9,
-                "20": 9, "21": 9, "22": 9, "23": 9, "24": 9, "25": 9, "26": 9, "27": 9, "28": 9,
-                "29": 9, "30": 9, "31": 9, "32": 9, "33": 9, "34": 9, "35": 9, "36": 9, "37": 9,
-                "38": 9, "39": 9, "40": 9, "41": 9, "42": 9, "43": 9, "44": 9, "45": 9, "46": 9,
-                "47": 9
-            };
-            
-            let timezoneOffset = placeOffsets[place] || 9;
-            date.setHours(date.getHours() + timezoneOffset);
-            
+            // 月の位置（黄経）をシンプルな近似式で求める
             let referenceDate = new Date("2000-01-06T00:00:00Z");
             let lunarCycle = 27.321661;
             let daysSinceReference = (date - referenceDate) / (1000 * 60 * 60 * 24);
-            let moonPosition = (daysSinceReference % lunarCycle) / lunarCycle * 360;
+            let moonLongitude = (daysSinceReference % lunarCycle) / lunarCycle * 360;
             
-            let signIndex = Math.floor((moonPosition / 30) % 12);
-            
+            let signIndex = Math.floor(moonLongitude / 30) % 12;
             return zodiacSigns[signIndex >= 0 ? signIndex : 0];
         }
     </script>
