@@ -20,8 +20,9 @@
                 return;
             }
             
-            let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
-            console.log("生成された日付オブジェクト:", birthDate);
+            // 日本時間（JST）を考慮し、9時間を引く
+            let birthDate = new Date(Date.UTC(year, month - 1, day, hour - 9, minute));
+            console.log("生成された日付オブジェクト（JST補正済み）:", birthDate);
             
             let moonSign = getAccurateMoonSign(birthDate);
             
