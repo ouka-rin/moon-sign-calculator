@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>月星座計算ツール</title>
+    <title>月星座計算ツール | 桜華凜監修</title>
     <script>
         function calculateMoonSign() {
             let year = parseInt(document.getElementById("year").value);
@@ -20,7 +20,6 @@
                 return;
             }
             
-            // 日本時間（JST）を考慮し、9時間を引く
             let birthDate = new Date(Date.UTC(year, month - 1, day, hour - 9, minute));
             console.log("生成された日付オブジェクト（JST補正済み）:", birthDate);
             
@@ -39,23 +38,45 @@
                 "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
             ];
             
-            // ユリウス日（JDE）の計算を補正
             let JDE = (date - new Date("2000-01-01T12:00:00Z")) / 86400000.0 + 2451545.0;
             let D = JDE - 2451545.0;
             console.log("JDE:", JDE, "D:", D);
             
-            // 月の黄経（NASAの公式データに基づく近似式）
             let M_moon = (218.316 + 13.176396 * D) % 360;
-            if (M_moon < 0) M_moon += 360; // 負の値を防ぐ
+            if (M_moon < 0) M_moon += 360;
             console.log("M_moon (月の黄経):", M_moon);
             
-            // 黄経から星座を決定
             let signIndex = Math.floor(M_moon / 30);
             console.log("signIndex:", signIndex, "月星座:", zodiacSigns[signIndex]);
             
             return zodiacSigns[signIndex];
         }
     </script>
+    <style>
+        .back-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 15px;
+            text-align: center;
+            background-color: #007bff;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        .back-button:hover {
+            background-color: #0056b3;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
     <h2>あなたの月星座を計算</h2>
@@ -95,29 +116,11 @@
         <option value="24">三重県</option>
         <option value="25">滋賀県</option>
         <option value="26">京都府</option>
-        <option value="27">大阪府</option>
-        <option value="28">兵庫県</option>
-        <option value="29">奈良県</option>
-        <option value="30">和歌山県</option>
-        <option value="31">鳥取県</option>
-        <option value="32">島根県</option>
-        <option value="33">岡山県</option>
-        <option value="34">広島県</option>
-        <option value="35">山口県</option>
-        <option value="36">徳島県</option>
-        <option value="37">香川県</option>
-        <option value="38">愛媛県</option>
-        <option value="39">高知県</option>
-        <option value="40">福岡県</option>
-        <option value="41">佐賀県</option>
-        <option value="42">長崎県</option>
-        <option value="43">熊本県</option>
-        <option value="44">大分県</option>
-        <option value="45">宮崎県</option>
-        <option value="46">鹿児島県</option>
-        <option value="47">沖縄県</option>
     </select><br><br>
     <button onclick="calculateMoonSign()">月星座を計算</button>
     <h3 id="result"></h3>
+    <br>
+    <a href="YOUR_NOTE_URL" class="back-button">📖 NOTEに戻る</a>
+    <div class="footer">© 2025 桜華凜 | 本ツールは桜華凜が開発しました</div>
 </body>
 </html>
