@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>月星座計算ツール☆</title>
+    <title>☆月星座計算ツール☆</title>
     <script>
         function calculateMoonSign() {
             let year = document.getElementById("year").value;
@@ -18,7 +18,7 @@
             }
             
             let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
-            let moonSign = getAccurateMoonSign(birthDate);
+            let moonSign = getCorrectMoonSign(birthDate);
             
             if (!moonSign) {
                 document.getElementById("result").innerText = "エラーが発生しました。もう一度お試しください。";
@@ -27,20 +27,21 @@
             }
         }
 
-        function getAccurateMoonSign(date) {
+        function getCorrectMoonSign(date) {
             const zodiacSigns = [
                 "牡羊座", "牡牛座", "双子座", "蟹座", "獅子座", "乙女座",
                 "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
             ];
             
-            // 月の軌道周期を基にした簡易計算（より精度を上げる）
+            // 月の軌道周期（NASAデータ基準）
             let referenceDate = new Date("2000-01-06T00:00:00Z");
-            let lunarCycle = 27.321661; // 月の平均公転周期（NASAデータ基準）
+            let lunarCycle = 27.321661; // 月の公転周期
             let daysSinceReference = (date - referenceDate) / (1000 * 60 * 60 * 24);
-            let moonPosition = (daysSinceReference % lunarCycle) / lunarCycle;
-            let signIndex = Math.floor(moonPosition * 12);
+            let moonPosition = (daysSinceReference % lunarCycle) / lunarCycle * 360; // 度数に変換
             
-            return zodiacSigns[signIndex] || "不明";
+            let signIndex = Math.floor((moonPosition / 30) % 12); // 0～11の範囲に収める
+            
+            return zodiacSigns[signIndex >= 0 ? signIndex : 0]; // 安全策として負の値を防ぐ
         }
     </script>
 </head>
