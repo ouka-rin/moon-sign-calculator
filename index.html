@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>月星座計算ツールv2</title>
+    <title>月星座計算ツール</title>
     <script>
         function calculateMoonSign() {
-            let year = parseInt(document.getElementById("year").value);
-            let month = parseInt(document.getElementById("month").value);
-            let day = parseInt(document.getElementById("day").value);
-            let hour = parseInt(document.getElementById("hour").value);
-            let minute = parseInt(document.getElementById("minute").value);
+            let year = document.getElementById("year").value;
+            let month = document.getElementById("month").value;
+            let day = document.getElementById("day").value;
+            let hour = document.getElementById("hour").value;
+            let minute = document.getElementById("minute").value;
             let place = document.getElementById("place").value;
+            
+            console.log("入力チェック:", { year, month, day, hour, minute, place });
             
             if (!year || !month || !day || !hour || !minute || !place) {
                 document.getElementById("result").innerText = "すべての項目を入力してください。";
                 return;
             }
             
-            let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
-            console.log("入力された日付:", birthDate);
+            let birthDate = new Date(Date.UTC(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hour), parseInt(minute)));
+            console.log("生成された日付オブジェクト:", birthDate);
             
             let moonSign = getAccurateMoonSign(birthDate);
             
@@ -36,7 +38,6 @@
                 "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
             ];
             
-            // Julian Date（ユリウス日）を計算
             let JDE = (date - new Date("2000-01-01T12:00:00Z")) / 86400000 + 2451545.0;
             let D = JDE - 2451545.0;
             console.log("JDE:", JDE, "D:", D);
