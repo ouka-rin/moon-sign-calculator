@@ -102,8 +102,21 @@
         document.getElementById("calculateButton").addEventListener("click", calculateMoonSign);
         function calculateMoonSign() {
             console.log("ボタン押された！");
-            // ここに月星座計算ロジック
-            document.getElementById("result").innerText = "あなたの月星座は：調査中です。";
+            let year = parseInt(document.getElementById("year").value);
+            let month = parseInt(document.getElementById("month").value);
+            let day = parseInt(document.getElementById("day").value);
+            let hour = parseInt(document.getElementById("hour").value);
+            let minute = parseInt(document.getElementById("minute").value);
+            
+            let birthDate = new Date(Date.UTC(year, month - 1, day, hour - 9, minute));
+            console.log("計算対象の日付:", birthDate);
+            
+            let zodiacSigns = ["牡羊座", "牡牛座", "双子座", "蟹座", "獅子座", "乙女座", "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"];
+            let M_moon = (218.316 + 13.176396 * ((birthDate - new Date("2000-01-01T12:00:00Z")) / 86400000.0 + 2451545.0)) % 360;
+            if (M_moon < 0) M_moon += 360;
+            let signIndex = Math.floor(M_moon / 30);
+            
+            document.getElementById("result").innerText = "あなたの月星座は：" + zodiacSigns[signIndex] + " です。";
         }
     </script>
 </body>
