@@ -92,10 +92,19 @@
         <option value="46">鹿児島県</option>
         <option value="47">沖縄県</option>
     </select><br><br>
-    <button onclick="calculateMoonSign()">月星座を計算</button>
+    <button id="calculateButton">月星座を計算</button>
     <h3 id="result"></h3>
     <br>
     <a href="YOUR_NOTE_URL" class="back-button">📖 NOTEに戻る</a>
     <div class="footer">© 2025 桜華凜 | 本ツールは桜華凜が開発しました</div>
+
+    <script defer>
+        document.getElementById("calculateButton").addEventListener("click", calculateMoonSign);
+        function calculateMoonSign() {
+            console.log("ボタン押された！");
+            // ここに月星座計算ロジック
+            document.getElementById("result").innerText = "あなたの月星座は：調査中です。";
+        }
+    </script>
 </body>
 </html>
