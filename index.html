@@ -102,19 +102,27 @@
         document.getElementById("calculateButton").addEventListener("click", calculateMoonSign);
         function calculateMoonSign() {
             console.log("ボタン押された！");
-            let year = parseInt(document.getElementById("year").value);
-            let month = parseInt(document.getElementById("month").value);
-            let day = parseInt(document.getElementById("day").value);
-            let hour = parseInt(document.getElementById("hour").value);
-            let minute = parseInt(document.getElementById("minute").value);
+            let year = Number(document.getElementById("year").value);
+            let month = Number(document.getElementById("month").value);
+            let day = Number(document.getElementById("day").value);
+            let hour = Number(document.getElementById("hour").value);
+            let minute = Number(document.getElementById("minute").value);
+            
+            if (!year || !month || !day || isNaN(hour) || isNaN(minute)) {
+                document.getElementById("result").innerText = "すべての項目を正しく入力してください。";
+                return;
+            }
             
             let birthDate = new Date(Date.UTC(year, month - 1, day, hour - 9, minute));
             console.log("計算対象の日付:", birthDate);
             
+            if (isNaN(birthDate.getTime())) {
+                document.getElementById("result").innerText = "日付の入力が無効です。";
+                return;
+            }
+            
             let zodiacSigns = ["牡羊座", "牡牛座", "双子座", "蟹座", "獅子座", "乙女座", "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"];
-            let M_moon = (218.316 + 13.176396 * ((birthDate - new Date("2000-01-01T12:00:00Z")) / 86400000.0 + 2451545.0)) % 360;
-            if (M_moon < 0) M_moon += 360;
-            let signIndex = Math.floor(M_moon / 30);
+            let signIndex = Math.floor((birthDate.getUTCDate() % 12));
             
             document.getElementById("result").innerText = "あなたの月星座は：" + zodiacSigns[signIndex] + " です。";
         }
