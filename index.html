@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>月星座計算ツール</title>
+    <script>
+        function calculateMoonSign() {
+            let year = document.getElementById("year").value;
+            let month = document.getElementById("month").value;
+            let day = document.getElementById("day").value;
+            let hour = document.getElementById("hour").value;
+            let minute = document.getElementById("minute").value;
+            
+            if (!year || !month || !day || !hour || !minute) {
+                document.getElementById("result").innerText = "すべての項目を入力してください。";
+                return;
+            }
+            
+            let birthDate = new Date(Date.UTC(year, month - 1, day, hour, minute));
+            let moonSign = getMoonSignFromDate(birthDate);
+            document.getElementById("result").innerText = "あなたの月星座は：" + moonSign + " です。";
+        }
+
+        function getMoonSignFromDate(date) {
+            const zodiacSigns = [
+                "牡羊座", "牡牛座", "双子座", "蟹座", "獅子座", "乙女座",
+                "天秤座", "蠍座", "射手座", "山羊座", "水瓶座", "魚座"
+            ];
+            
+            let referenceDate = new Date("2000-01-01T00:00:00Z");
+            let daysSinceReference = (date - referenceDate) / (1000 * 60 * 60 * 24);
+            let moonCycleDays = 27.32;
+            let moonPhase = (daysSinceReference % moonCycleDays) / moonCycleDays;
+            let signIndex = Math.floor(moonPhase * 12);
+            return zodiacSigns[signIndex];
+        }
+    </script>
+</head>
+<body>
+    <h2>あなたの月星座を計算</h2>
+    <label>生年月日：</label>
+    <input type="number" id="year" placeholder="年" min="1900" max="2100">年
+    <input type="number" id="month" placeholder="月" min="1" max="12">月
+    <input type="number" id="day" placeholder="日" min="1" max="31">日<br><br>
+    <label>出生時間：</label>
+    <input type="number" id="hour" placeholder="時" min="0" max="23">時
+    <input type="number" id="minute" placeholder="分" min="0" max="59">分<br><br>
+    <button onclick="calculateMoonSign()">月星座を計算</button>
+    <h3 id="result"></h3>
+    
+    <br><br>
+    <a href="https://note.com/your_note_page" style="display:block; text-align:center; padding:10px; background-color:#007BFF; color:white; text-decoration:none; border-radius:5px;">📖 NOTEに戻る</a>
+</body>
+</html>
